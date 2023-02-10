@@ -1,5 +1,6 @@
 package dbViewer;
 
+import dbConn.MySqlConnectionMaker;
 import dbController.BoardController;
 import dbController.UserController;
 import model.BoardDTO;
@@ -18,6 +19,7 @@ public class BoardViewer {
     private final String DATE_FORMAT = "yy/MM/dd HH:mm:ss";
     private UserDTO login;
     private Connection connection;
+    private MySqlConnectionMaker mySqlConnectionMaker;
 
     public BoardViewer(Scanner scanner, Connection connection, UserDTO login) {
         this.connection = connection;
@@ -80,7 +82,7 @@ public class BoardViewer {
     }
 
     private void printOne(int id) {
-        UserController userController = new UserController(connection);
+        UserController userController = new UserController(mySqlConnectionMaker);
         DateFormat df = new SimpleDateFormat(DATE_FORMAT);
         BoardDTO boardDTO = boardController.selectOne(id);
         System.out.println("=================================");

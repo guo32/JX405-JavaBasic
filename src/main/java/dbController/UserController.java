@@ -1,5 +1,6 @@
 package dbController;
 
+import dbConn.ConnectionMaker;
 import model.UserDTO;
 
 import java.sql.Connection;
@@ -10,8 +11,8 @@ import java.sql.SQLException;
 public class UserController {
     private Connection connection;
 
-    public UserController(Connection connection) {
-        this.connection = connection;
+    public UserController(ConnectionMaker connectionMaker) {
+        this.connection = connectionMaker.makeConnection();
     }
 
     public boolean insert(UserDTO userDTO) {

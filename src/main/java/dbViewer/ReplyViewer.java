@@ -1,5 +1,6 @@
 package dbViewer;
 
+import dbConn.MySqlConnectionMaker;
 import dbController.ReplyController;
 import dbController.UserController;
 import model.ReplyDTO;
@@ -16,6 +17,7 @@ public class ReplyViewer {
     private ReplyController replyController;
     private UserDTO login;
     private Connection connection;
+    private MySqlConnectionMaker mySqlConnectionMaker;
 
     public ReplyViewer(Scanner scanner, Connection connection, UserDTO login) {
         this.connection = connection;
@@ -25,7 +27,7 @@ public class ReplyViewer {
     }
 
     public void printAll(int boardId) {
-        UserController userController = new UserController(connection);
+        UserController userController = new UserController(mySqlConnectionMaker);
         ArrayList<ReplyDTO> list = replyController.selectAll(boardId);
         SimpleDateFormat sdf = new SimpleDateFormat("yyMd H:m:s");
         for (ReplyDTO r : list) {
