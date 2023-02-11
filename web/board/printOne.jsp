@@ -141,6 +141,18 @@
                         <td>
                                 ${reply.modifyDate}
                         </td>
+                        <c:if test="${reply.writerId == login.id}">
+                            <td>
+                                <div class="btn btn-outline-success" onclick="">
+                                    수정
+                                </div>
+                            </td>
+                            <td>
+                                <div class="btn btn-outline-danger" onclick="if(confirm('정말로 삭제하시겠습니까?')){location.href='../reply/delete.jsp?id=${reply.id}&boardId=<%=id%>'}">
+                                    삭제
+                                </div>
+                            </td>
+                        </c:if>
                     </tr>
                 </c:forEach>
             </table>
