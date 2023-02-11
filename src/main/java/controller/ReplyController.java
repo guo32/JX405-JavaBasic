@@ -17,7 +17,7 @@ public class ReplyController {
     }
 
     public void insert(ReplyDTO replyDTO) {
-        String query = "INSERT INTO `reply`(`content`, `board_id`, `writer_id`, `entry_date`) VALUES(?, ?, ?, NOW())";
+        String query = "INSERT INTO `reply`(`content`, `boardId`, `writerId`, `entry_date`) VALUES(?, ?, ?, NOW())";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, replyDTO.getContent());
@@ -34,7 +34,7 @@ public class ReplyController {
 
     public ArrayList<ReplyDTO> selectAll(int boardId) {
         ArrayList<ReplyDTO> temp = new ArrayList<>();
-        String query = "SELECT * FROM `reply` WHERE `board_id` = ?";
+        String query = "SELECT * FROM `reply` WHERE `boardId` = ?";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, boardId);
@@ -43,8 +43,8 @@ public class ReplyController {
                 ReplyDTO r = new ReplyDTO();
                 r.setId(resultSet.getInt("id"));
                 r.setContent(resultSet.getString("content"));
-                r.setBoardId(resultSet.getInt("board_id"));
-                r.setWriterId(resultSet.getInt("writer_id"));
+                r.setBoardId(resultSet.getInt("boardId"));
+                r.setWriterId(resultSet.getInt("writerId"));
                 r.setEntryDate(resultSet.getTimestamp("entry_date"));
                 r.setModifyDate(resultSet.getTimestamp("modify_date"));
 
@@ -71,8 +71,8 @@ public class ReplyController {
                 r = new ReplyDTO();
                 r.setId(resultSet.getInt("id"));
                 r.setContent(resultSet.getString("content"));
-                r.setBoardId(resultSet.getInt("board_id"));
-                r.setWriterId(resultSet.getInt("writer_id"));
+                r.setBoardId(resultSet.getInt("boardId"));
+                r.setWriterId(resultSet.getInt("writerId"));
                 r.setEntryDate(resultSet.getTimestamp("entry_date"));
                 r.setModifyDate(resultSet.getTimestamp("modify_date"));
             }
