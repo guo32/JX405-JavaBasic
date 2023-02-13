@@ -37,62 +37,62 @@
 
             ConnectionMaker connectionMaker = new MySqlConnectionMaker();
             BoardController controller = new BoardController(connectionMaker);
+            UserController userController = new UserController(connectionMaker);
 
             ArrayList<BoardDTO> list = controller.selectAll();
 
-            if (list.isEmpty()) {
+            pageContext.setAttribute("list", list);
+            pageContext.setAttribute("userController", userController);
         %>
-        <div class="row">
-            <div class="col-6">
-                <span>아직 등록된 글이 존재하지 않습니다.</span>
-            </div>
-        </div>
-        <%
-            } else {
-                UserController userController = new UserController(connectionMaker);
-                SimpleDateFormat sdf = new SimpleDateFormat("yy년 MM월 dd일 H:m:s");
-        %>
+        <c:choose>
+            <c:when test="${list.isEmpty()}">
+                <div class="row">
+                    <div class="col-6">
+                        <span>아직 등록된 글이 존재하지 않습니다.</span>
+                    </div>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <c:set var="list" value="<%=list%>"/>
+                <div class="row justify-content-center">
+                    <div class="col-10">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                            <tr>
+                                <th>번호</th>
+                                <th>제목</th>
+                                <th>작성자</th>
+                                <th>작성일</th>
+                                <th>수정일</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="b" items="${list}">
+                                <tr class="table-light" onclick="location.href='/board/printOne.jsp?id=${b.id}'">
+                                    <td>
+                                            ${b.id}
+                                    </td>
+                                    <td>
+                                            ${b.title}
+                                    </td>
+                                    <td>
+                                            ${userController.selectOne(b.writerId).nickname}
+                                    </td>
+                                    <td>
+                                            ${b.entryDate}
+                                    </td>
+                                    <td>
+                                            ${b.modifyDate}
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </c:otherwise>
+        </c:choose>
 
-        <c:set var="list" value="<%=list%>"/>
-        <div class="row justify-content-center">
-            <div class="col-10">
-                <table class="table table-dark table-hover">
-                    <thead>
-                    <tr>
-                        <th>번호</th>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>작성일</th>
-                        <th>수정일</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="b" items="${list}">
-                        <tr class="table-light" onclick="location.href='/board/printOne.jsp?id=${b.id}'">
-                            <td>
-                                ${b.id}
-                            </td>
-                            <td>
-                                ${b.title}
-                            </td>
-                            <td>
-                                ${b.writerId}
-                            </td>
-                            <td>
-                                ${b.entryDate}
-                            </td>
-                            <td>
-                                ${b.modifyDate}
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <%
-            }
-        %>
         <div class="row">
             <div class="col-12 text-end">
                 <span class="btn btn-outline-info" onclick="location.href='/board/write.jsp'">글 작성하기</span>

@@ -1,12 +1,12 @@
 <%@ page import="model.UserDTO" %>
-<%@ page import="dbConn.ConnectionMaker" %>
+<%@ page import="controller.ReplyController" %>
 <%@ page import="dbConn.MySqlConnectionMaker" %>
-<%@ page import="controller.BoardController" %>
-<%@ page import="model.BoardDTO" %><%--
+<%@ page import="dbConn.ConnectionMaker" %>
+<%@ page import="model.ReplyDTO" %><%--
   Created by IntelliJ IDEA.
   User: USER
-  Date: 2023-02-10
-  Time: 오후 2:32
+  Date: 2023-02-13
+  Time: 오전 10:15
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -19,15 +19,14 @@
         }
 
         int id = Integer.parseInt(request.getParameter("id"));
+        int boardId = Integer.parseInt(request.getParameter("boardId"));
 
         ConnectionMaker connectionMaker = new MySqlConnectionMaker();
-        BoardController boardController = new BoardController(connectionMaker);
-        BoardDTO b = boardController.selectOne(id);
-        if (b.getWriterId() != login.getId()) {
-            response.sendRedirect("/board/printOne.jsp?id=" + id);
-        }
+        ReplyController replyController = new ReplyController(connectionMaker);
+        ReplyDTO replyDTO = replyController.selectOne(id);
     %>
-    <title><%=b.getTitle()%> 글 수정하기</title>
+    <title>댓글 수정</title>
+
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -40,27 +39,14 @@
 <div class="container-fluid">
     <div class="row align-items-center vh-100 justify-content-center" style="background-color: #212529">
         <div class="col-10">
-            <form action="/board/update_logic.jsp?id=<%=id%>" method="post">
+            <form action="/reply/update_logic.jsp?id=<%=id%>&boardId=<%=boardId%>" method="post">
                 <table class="table table-striped table-dark">
                     <tr>
-                        <th class="col-2">글번호</th>
-                        <td class="col-10"><%=b.getId()%>
+                        <td class="col-9">
+                            <textarea name="content" placeholder="댓글을 입력해주세요." class="form-control col-10"><%=replyDTO.getContent()%></textarea>
                         </td>
-                    </tr>
-                    <tr>
-                        <th class="col-2">제목</th>
-                        <td class="col-10">
-                            <input type="text" name="title" value="<%=b.getTitle()%>" class="form-control">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <textarea name="content" class="form-control"><%=b.getContent()%></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button class="btn btn-outline-success">수정하기</button>
+                        <td>
+                            <button type="submit" class="btn btn-outline-info">수정</button>
                         </td>
                     </tr>
                 </table>

@@ -32,11 +32,11 @@
         UserController userController = new UserController(connectionMaker);
         ReplyController replyController = new ReplyController(connectionMaker);
         ArrayList<ReplyDTO> replyList = replyController.selectAll(id);
-        System.out.println(replyList.size());
 
         BoardDTO b = boardController.selectOne(id);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM일 dd일 HH시 mm분 ss초");
+        pageContext.setAttribute("userController", userController);
     %>
     <script>
         function confirmDelete() {
@@ -61,9 +61,10 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-<div class="container-fluid" style="background-color: #212529">
-    <div class="row align-items-center vh-100 justify-content-center">
+<div class="container-fluid">
+    <div class="row align-items-center vh-100 justify-content-center" style="background-color: #212529">
         <div class="col-10">
+            <div class="btn btn-outline-info" onclick="location.href='/board/printList.jsp'">목록으로</div>
             <table class="table table-striped table-dark">
                 <tr>
                     <th class="col-2">글번호</th>
@@ -110,7 +111,7 @@
                 <table class="table table-dark table-hover">
                     <tr>
                         <td class="col-9">
-                            <textarea name="content" placeholder="댓글을 입력해주세요." class="form-control"></textarea>
+                            <textarea name="content" placeholder="댓글을 입력해주세요." class="form-control col-10"></textarea>
                         </td>
                         <td>
                             <button type="submit" class="btn btn-outline-info">등록</button>
@@ -120,35 +121,31 @@
             </form>
             <table class="table table-dark table-hover">
                 <c:if test="${replyList.size() == 0}">
-                    <tr class="table-light">
+                    <tr class="table-right">
                         <td>아직 등록된 댓글이 없습니다.</td>
                     </tr>
                 </c:if>
                 <c:forEach var="reply" items="${replyList}">
-                    <tr class="table-light">
+                    <tr class="table-dark">
                         <td>
                                 ${reply.id}
                         </td>
-                        <td>
+                        <td class="col-6">
                                 ${reply.content}
                         </td>
                         <td>
-                                ${reply.writerId}
+                                ${userController.selectOne(reply.writerId).nickname}
                         </td>
                         <td>
                                 ${reply.entryDate}
                         </td>
-                        <td>
-                                ${reply.modifyDate}
-                        </td>
                         <c:if test="${reply.writerId == login.id}">
                             <td>
-                                <div class="btn btn-outline-success" onclick="">
+                                <div class="btn btn-outline-success btn-sm" onclick="location.href='../reply/update.jsp?id=${reply.id}&boardId=<%=id%>'">
                                     수정
                                 </div>
-                            </td>
-                            <td>
-                                <div class="btn btn-outline-danger" onclick="if(confirm('정말로 삭제하시겠습니까?')){location.href='../reply/delete.jsp?id=${reply.id}&boardId=<%=id%>'}">
+                                <div class="btn btn-outline-danger btn-sm"
+                                     onclick="if(confirm('정말로 삭제하시겠습니까?')){location.href='../reply/delete.jsp?id=${reply.id}&boardId=<%=id%>'}">
                                     삭제
                                 </div>
                             </td>
