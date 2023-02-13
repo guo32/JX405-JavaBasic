@@ -15,6 +15,7 @@
 </head>
 <body>
 <%
+    request.setCharacterEncoding("utf-8");
     ConnectionMaker connectionMaker = new MySqlConnectionMaker();
     UserController controller = new UserController(connectionMaker);
 

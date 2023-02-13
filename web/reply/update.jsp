@@ -13,6 +13,7 @@
 <html>
 <head>
     <%
+        request.setCharacterEncoding("utf-8");
         UserDTO login = (UserDTO) session.getAttribute("login");
         if (login == null) {
             response.sendRedirect("/index.jsp");
@@ -25,6 +26,7 @@
         ReplyController replyController = new ReplyController(connectionMaker);
         ReplyDTO replyDTO = replyController.selectOne(id);
     %>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <title>댓글 수정</title>
 
     <!-- CSS only -->
