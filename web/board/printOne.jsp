@@ -14,7 +14,7 @@
   Time: 오후 1:28
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
@@ -63,10 +63,10 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row align-items-center vh-100 justify-content-center" style="background-color: #212529">
-        <div class="col-10">
+    <div class="row align-items-center vh-100 justify-content-center">
+        <div class="col-10 mb-3">
             <div class="btn btn-outline-info" onclick="location.href='/board/printList.jsp'">목록으로</div>
-            <table class="table table-striped table-dark">
+            <table class="table table-striped table-light">
                 <tr>
                     <th class="col-2">글번호</th>
                     <td class="col-10">${b.id}
@@ -109,7 +109,7 @@
                 </c:if>
             </table>
             <form action="/reply/write.jsp?id=<%=id%>" method="post">
-                <table class="table table-dark table-hover">
+                <table class="table table-light table-hover">
                     <tr>
                         <td class="col-9">
                             <textarea name="content" placeholder="댓글을 입력해주세요." class="form-control col-10"></textarea>
@@ -120,14 +120,14 @@
                     </tr>
                 </table>
             </form>
-            <table class="table table-dark table-hover">
+            <table class="table table-light table-hover">
                 <c:if test="${replyList.size() == 0}">
                     <tr class="table-right">
                         <td>아직 등록된 댓글이 없습니다.</td>
                     </tr>
                 </c:if>
                 <c:forEach var="reply" items="${replyList}">
-                    <tr class="table-dark">
+                    <tr class="table-light">
                         <td>
                                 ${reply.id}
                         </td>
@@ -138,22 +138,53 @@
                                 ${userController.selectOne(reply.writerId).nickname}
                         </td>
                         <td>
-                                ${reply.entryDate}
+                            <fmt:formatDate value="${reply.entryDate}" pattern="yy/MM/dd"/>
                         </td>
-                        <c:if test="${reply.writerId == login.id}">
-                            <td>
-                                <div class="btn btn-outline-success btn-sm" onclick="location.href='../reply/update.jsp?id=${reply.id}&boardId=<%=id%>'">
+                        <td>
+                            <c:if test="${reply.writerId == login.id}">
+                                <div class="btn btn-outline-success btn-sm"
+                                     onclick="location.href='../reply/update.jsp?id=${reply.id}&boardId=<%=id%>'">
                                     수정
                                 </div>
                                 <div class="btn btn-outline-danger btn-sm"
                                      onclick="if(confirm('정말로 삭제하시겠습니까?')){location.href='../reply/delete.jsp?id=${reply.id}&boardId=<%=id%>'}">
                                     삭제
                                 </div>
-                            </td>
-                        </c:if>
+                            </c:if>
+                        </td>
                     </tr>
+                    <tr class="table-light updateForm"></tr>
                 </c:forEach>
             </table>
+        </div>
+        <div class="col-10">
+            <form action="../reply/write_action.jsp?boardId=${b.id}" method="post">
+                <table class="table table-striped">
+                    <c:choose>
+                        <c:when test="${empty replyList}">
+                            <tr>
+                                <td>
+                                    아직 등록된 댓글이 존재하지 않습니다.
+                                </td>
+                            </tr>
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach items="${replyList}" var="replyDTO">
+                                <tr>
+                                    <td>
+                                            ${userController.selectOne(replyDTO.writerId).nickname} ${replyDTO.id} ${replyDTO.content}
+                                        <fmt:formatDate value="${replyDTO.entryDate}" pattern="yy/MM/dd"/>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
+                    <tr>
+                        <input type="text" name="content" class="form-control">
+                        <button class="btn btn-light">댓글 달기</button>
+                    </tr>
+                </table>
+            </form>
         </div>
     </div>
 </div>
