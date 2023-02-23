@@ -27,13 +27,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
             crossorigin="anonymous"></script>
+    <script src="../assets/js_library/build/ckeditor.js"></script>
+    <style>
+        .ck-editor__editable {
+            height: 300px;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid" style="background-color: #212529">
     <div class="row align-items-center vh-100 justify-content-center">
         <div class="col-10">
             <form action="/board/write_logic.jsp" method="post">
-                <table class="table table-striped table-dark">
+                <table class="table table-striped table-light">
                     <tr>
                         <th class="col-2">제목</th>
                         <td class="col-10">
@@ -42,7 +48,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <textarea name="content" class="form-control"></textarea>
+                            <textarea id="editor" name="content"></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -55,5 +61,14 @@
         </div>
     </div>
 </div>
+<script>
+    ClassicEditor.create(document.querySelector('#editor'), {
+        style: {
+            height: 500
+        }
+    }).catch(error => {
+        console.log(error)
+    });
+</script>
 </body>
 </html>
