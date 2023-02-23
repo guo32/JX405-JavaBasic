@@ -66,7 +66,7 @@
     <div class="row align-items-center vh-100 justify-content-center">
         <div class="col-10 mb-3">
             <div class="btn btn-outline-info" onclick="location.href='/board/printList.jsp'">목록으로</div>
-            <table class="table table-striped table-light">
+            <table class="table table-striped table-light" id="table-board">
                 <tr>
                     <th class="col-2">글번호</th>
                     <td class="col-10">${b.id}
@@ -107,6 +107,11 @@
                         </td>
                     </tr>
                 </c:if>
+                <tr id="tr-new-row">
+                    <td colspan="2" class="text-end" onclick="addNewRow()">
+                        새 줄 추가하기
+                    </td>
+                </tr>
             </table>
             <form action="/reply/write.jsp?id=<%=id%>" method="post">
                 <table class="table table-light table-hover">
@@ -187,6 +192,22 @@
             </form>
         </div>
     </div>
+    <script>
+        let addNewRow = () => {
+            let newRow = document.getElementById('tr-new-row');
+            let table = document.getElementById('table-board');
+
+            console.log(table.children[0].children);
+            table.children[0].removeChild(newRow);
+
+            let tr = document.createElement('tr');
+            let td = document.createElement('td');
+            td.colSpan = 2;
+            tr.appendChild(td);
+            table.children[0].appendChild(tr);
+            table.children[0].appendChild(newRow);
+        }
+    </script>
 </div>
 </body>
 </html>
